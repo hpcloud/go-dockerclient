@@ -29,25 +29,25 @@ type ListContainersOptions struct {
 }
 
 type APIPort struct {
-	PrivatePort int64
-	PublicPort  int64
-	Type        string
-	IP          string
+	PrivatePort int64  `json:"PrivatePort,omitempty" yaml:"PrivatePort,omitempty"`
+	PublicPort  int64  `json:"PublicPort,omitempty" yaml:"PublicPort,omitempty"`
+	Type        string `json:"Type,omitempty" yaml:"Type,omitempty"`
+	IP          string `json:"IP,omitempty" yaml:"IP,omitempty"`
 }
 
 // APIContainers represents a container.
 //
 // See http://goo.gl/QeFH7U for more details.
 type APIContainers struct {
-	ID         string `json:"Id"`
-	Image      string
-	Command    string
-	Created    int64
-	Status     string
-	Ports      []APIPort
-	SizeRw     int64
-	SizeRootFs int64
-	Names      []string
+	ID         string    `json:"Id" yaml:"Id"`
+	Image      string    `json:"Image,omitempty" yaml:"Image,omitempty"`
+	Command    string    `json:"Command,omitempty" yaml:"Command,omitempty"`
+	Created    int64     `json:"Created,omitempty" yaml:"Created,omitempty"`
+	Status     string    `json:"Status,omitempty" yaml:"Status,omitempty"`
+	Ports      []APIPort `json:"Ports,omitempty" yaml:"Ports,omitempty"`
+	SizeRw     int64     `json:"SizeRw,omitempty" yaml:"SizeRw,omitempty"`
+	SizeRootFs int64     `json:"SizeRootFs,omitempty" yaml:"SizeRootFs,omitempty"`
+	Names      []string  `json:"Names,omitempty" yaml:"Names,omitempty"`
 }
 
 // ListContainers returns a slice of containers matching the given criteria.
@@ -158,28 +158,31 @@ func parsePort(rawPort string) (int, error) {
 	return int(port), nil
 }
 
+// Config is the list of configuration options used when creating a container.
+// Config does not contain the options that are specific to starting a container on a
+// given host.  Those are contained in HostConfig
 type Config struct {
-	Hostname        string
-	Domainname      string
-	User            string
-	Memory          int64
-	MemorySwap      int64
-	CpuShares       int64
-	AttachStdin     bool
-	AttachStdout    bool
-	AttachStderr    bool
-	PortSpecs       []string
-	ExposedPorts    map[Port]struct{}
-	Tty             bool
-	OpenStdin       bool
-	StdinOnce       bool
-	Env             []string
-	Cmd             []string
-	Dns             []string  // For Docker API v1.9 and below only
-	Image           string
-	Volumes         map[string]struct{}
-	VolumesFrom     string
-	WorkingDir      string
+	Hostname        string              `json:"Hostname,omitempty" yaml:"Hostname,omitempty"`
+	Domainname      string              `json:"Domainname,omitempty" yaml:"Domainname,omitempty"`
+	User            string              `json:"User,omitempty" yaml:"User,omitempty"`
+	Memory          int64               `json:"Memory,omitempty" yaml:"Memory,omitempty"`
+	MemorySwap      int64               `json:"MemorySwap,omitempty" yaml:"MemorySwap,omitempty"`
+	CPUShares       int64               `json:"CpuShares,omitempty" yaml:"CpuShares,omitempty"`
+	AttachStdin     bool                `json:"AttachStdin,omitempty" yaml:"AttachStdin,omitempty"`
+	AttachStdout    bool                `json:"AttachStdout,omitempty" yaml:"AttachStdout,omitempty"`
+	AttachStderr    bool                `json:"AttachStderr,omitempty" yaml:"AttachStderr,omitempty"`
+	PortSpecs       []string            `json:"PortSpecs,omitempty" yaml:"PortSpecs,omitempty"`
+	ExposedPorts    map[Port]struct{}   `json:"ExposedPorts,omitempty" yaml:"ExposedPorts,omitempty"`
+	Tty             bool                `json:"Tty,omitempty" yaml:"Tty,omitempty"`
+	OpenStdin       bool                `json:"OpenStdin,omitempty" yaml:"OpenStdin,omitempty"`
+	StdinOnce       bool                `json:"StdinOnce,omitempty" yaml:"StdinOnce,omitempty"`
+	Env             []string            `json:"Env,omitempty" yaml:"Env,omitempty"`
+	Cmd             []string            `json:"Cmd" yaml:"Cmd"`
+	DNS             []string            `json:"Dns,omitempty" yaml:"Dns,omitempty"` // For Docker API v1.9 and below only
+	Image           string              `json:"Image,omitempty" yaml:"Image,omitempty"`
+	Volumes         map[string]struct{} `json:"Volumes,omitempty" yaml:"Volumes,omitempty"`
+	VolumesFrom     string              `json:"VolumesFrom,omitempty" yaml:"VolumesFrom,omitempty"`
+	WorkingDir      string              `json:"WorkingDir,omitempty" yaml:"WorkingDir,omitempty"`
 	Entrypoint      []string
 	NetworkDisabled bool
 }
@@ -287,14 +290,14 @@ type KeyValuePair struct {
 }
 
 type HostConfig struct {
-	Binds           []string
-	ContainerIDFile string
-	LxcConf         []KeyValuePair
-	Privileged      bool
-	PortBindings    map[Port][]PortBinding
-	Links           []string
-	PublishAllPorts bool
-	Dns             []string  // For Docker API v1.10 and above only
+	Binds           []string               `json:"Binds,omitempty" yaml:"Binds,omitempty"`
+	ContainerIDFile string                 `json:"ContainerIDFile,omitempty" yaml:"ContainerIDFile,omitempty"`
+	LxcConf         []KeyValuePair         `json:"LxcConf,omitempty" yaml:"LxcConf,omitempty"`
+	Privileged      bool                   `json:"Privileged,omitempty" yaml:"Privileged,omitempty"`
+	PortBindings    map[Port][]PortBinding `json:"PortBindings,omitempty" yaml:"PortBindings,omitempty"`
+	Links           []string               `json:"Links,omitempty" yaml:"Links,omitempty"`
+	PublishAllPorts bool                   `json:"PublishAllPorts,omitempty" yaml:"PublishAllPorts,omitempty"`
+	DNS             []string               `json:"Dns,omitempty" yaml:"Dns,omitempty"` // For Docker API v1.10 and above only
 }
 
 // StartContainer starts a container, returning an errror in case of failure.
